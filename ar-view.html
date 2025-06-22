@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR View</title>
+    <script src="js/three.js"></script>
+    <script src="jsartoolkit5/artoolkit.min.js"></script>
+    <script src="jsartoolkit5/artoolkit.three.js"></script>
+    <script src="js/LoaderSupport.js"></script>
+    <script src="js/OBJLoader.js"></script>
+    <script src="js/MTLLoader.js"></script>
+    <style>
+        body, html { margin: 0; padding: 0; overflow: hidden; }
+        #ar-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+
+    <script>
+        // get model path from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const modelPath = urlParams.get('model');
+
+        if (modelPath) {
+            // AR.js setup
+            var scene = new THREE.Scene();
+            var camera = new THREE.Camera();
+            scene.add(camera);
+
+            var renderer = new THREE.WebGLRenderer({
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            var arToolkitSource = new THREEx.ArToolkitSource({
+                sourceType: 'webcam',
+            });
+
+            arToolkitSource.init(function onReady() {
+                setTimeout(() => {
+                    arToolkitSource.onResizeElement();
+                    arToolkitSource.copyElementSizeTo(renderer.domElement);
+                    if (arToolkitContext.arController !== null) {
+                        arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas);
+                    }
+                }, 2000);
+            });
+
+            var arToolkitContext = new THREEx.ArToolkitContext({
+                cameraParametersUrl: 'data/camera_para.dat',
+                detectionMode: 'mono',
+            });
+
+            arToolkitContext.init(function onCompleted() {
+                camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
+            });
+
+            var markerControls = new THREEx.ArMarkerControls(arToolkitContext, camera, {
+                type: 'pattern',
+                patternUrl: 'data/hiro.patt',
+                changeMatrixMode: 'cameraTransformMatrix'
+            });
+
+            scene.visible = false;
+
+            let markerRoot = new THREE.Group();
+            scene.add(markerRoot);
+
+            // Add a light
+            var ambientLight = new THREE.AmbientLight(0xcccccc, 0.5);
+            scene.add(ambientLight);
+
+            var pointLight = new THREE.PointLight(0xffffff, 0.8);
+            camera.add(pointLight);
+
+            // Load the model
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.setPath(modelPath.substring(0, modelPath.lastIndexOf('/') + 1));
+            mtlLoader.load(modelPath.replace('.obj', '.mtl'), function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.setPath(modelPath.substring(0, modelPath.lastIndexOf('/') + 1));
+                objLoader.load(modelPath.substring(modelPath.lastIndexOf('/') + 1), function(object) {
+                    object.scale.set(0.1, 0.1, 0.1); // Adjust scale as needed
+                    markerRoot.add(object);
+                });
+            });
+
+            function animate() {
+                requestAnimationFrame(animate);
+                if (arToolkitSource.ready === false) return;
+
+                arToolkitContext.update(arToolkitSource.domElement);
+                scene.visible = camera.visible;
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+        } else {
+            document.body.innerHTML = "<h1>No model specified.</h1>";
+        }
+
+    </script>
+
+</body>
+</html>
