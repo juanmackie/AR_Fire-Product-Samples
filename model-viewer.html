@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Model Viewer</title>
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        #model-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+        #model-selector {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div id="model-container">
+        <div id="model-selector">
+            <label for="model-select">Select Model:</label>
+            <select id="model-select">
+                <option value="fish-2">Fish Model</option>
+            </select>
+        </div>
+        <div id="loading">Loading model...</div>
+    </div>
+
+    <script src="js/three.js"></script>
+    <script src="js/OBJLoader.js"></script>
+    <script src="js/MTLLoader.js"></script>
+    <script>
+        // Initialize Three.js scene
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('model-container').appendChild(renderer.domElement);
+
+        // Add lights
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(1, 1, 1);
+        scene.add(directionalLight);
+
+        // Camera position
+        camera.position.z = 5;
+
+        // Model loading function
+        function loadModel(modelName) {
+            // Remove existing model if present
+            scene.children.filter(child => child.type === 'Group').forEach(group => scene.remove(group));
+            
+            document.getElementById('loading').style.display = 'block';
+            console.log(`Loading model: ${modelName}`);
+            
+            if (modelName === 'fish-2') {
+                // Load materials first
+                new THREE.MTLLoader()
+                    .load('models/fish-2.mtl', (materials) => {
+                        materials.preload();
+                        console.log('Materials loaded');
+                        
+                        // Load object with materials
+                        new THREE.OBJLoader()
+                            .setMaterials(materials)
+                            .load('models/fish-2.obj', (object) => {
+                                console.log('Model loaded');
+                                scene.add(object);
+                                document.getElementById('loading').style.display = 'none';
+                                animate();
+                            }, undefined, (error) => {
+                                console.error('Error loading model:', error);
+                                document.getElementById('loading').textContent = 'Error loading model';
+                            });
+                    }, undefined, (error) => {
+                        console.error('Error loading materials:', error);
+                        document.getElementById('loading').textContent = 'Error loading materials';
+                    });
+            }
+        }
+
+        // Handle model selection
+        document.getElementById('model-select').addEventListener('change', (e) => {
+            loadModel(e.target.value);
+        });
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Rotate model slowly
+            scene.children.forEach(child => {
+                if (child.type === 'Group') {
+                    child.rotation.y += 0.01;
+                }
+            });
+            
+            renderer.render(scene, camera);
+        }
+
+        // Initial load
+        loadModel('fish-2');
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
