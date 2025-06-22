@@ -39,7 +39,7 @@
         <div id="model-selector">
             <label for="model-select">Select Model:</label>
             <select id="model-select">
-                <option value="fish-2">Fish Model</option>
+                <option value="fish-2">fish-2.obj</option>
             </select>
         </div>
         <div id="loading">Loading model...</div>
@@ -49,6 +49,20 @@
     <script src="js/OBJLoader.js"></script>
     <script src="js/MTLLoader.js"></script>
     <script>
+        // List of available models
+        const models = [
+            { name: 'fish-2', file: 'fish-2.obj', mtl: 'fish-2.mtl' }
+        ];
+    
+        // Populate model selector
+        const modelSelect = document.getElementById('model-select');
+        models.forEach(model => {
+            const option = document.createElement('option');
+            option.value = model.name;
+            option.text = model.file;
+            modelSelect.appendChild(option);
+        });
+    
         // Initialize Three.js scene
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
