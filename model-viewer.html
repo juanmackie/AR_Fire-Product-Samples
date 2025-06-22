@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Model Viewer</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    
     <style>
-        body { 
-            margin: 0; 
+        body {
+            margin: 0;
             overflow: hidden;
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
         #model-container {
             position: relative;
@@ -23,6 +26,8 @@
             background: rgba(255, 255, 255, 0.8);
             padding: 10px;
             border-radius: 5px;
+            max-height: 80vh;
+            overflow-y: auto;
         }
         #loading {
             position: absolute;
@@ -32,15 +37,18 @@
             color: white;
             font-size: 24px;
         }
+        .card {
+            cursor: pointer;
+        }
+        .card:hover {
+            background-color: #ff9800; /* Orange */
+        }
     </style>
 </head>
 <body>
     <div id="model-container">
-        <div id="model-selector">
-            <label for="model-select">Select Model:</label>
-            <select id="model-select">
-                <option value="fish-2">fish-2.obj</option>
-            </select>
+        <div id="model-selector" class="row">
+            <!-- Model cards will be generated here -->
         </div>
         <div id="loading">Loading model...</div>
     </div>
@@ -53,13 +61,22 @@
             { name: 'fish-2', file: 'fish-2.obj', mtl: 'fish-2.mtl' }
         ];
     
-        // Populate model selector
-        const modelSelect = document.getElementById('model-select');
+        const modelSelector = document.getElementById('model-selector');
         models.forEach(model => {
-            const option = document.createElement('option');
-            option.value = model.name;
-            option.text = model.file;
-            modelSelect.appendChild(option);
+            const card = document.createElement('div');
+            card.classList.add('col', 's12', 'm4', 'l3');
+            card.innerHTML = `
+                <div class="card" data-model-name="${model.name}">
+                    <div class="card-image">
+                        <img src="models/${model.file.replace('.obj', '.jpg')}" onerror="this.src='models/default.jpg'">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title">${model.name}</span>
+                    </div>
+                </div>
+            `;
+            card.addEventListener('click', () => loadModel(model.name));
+            modelSelector.appendChild(card);
         });
     
         // Initialize Three.js scene
@@ -113,10 +130,6 @@
                 });
         }
 
-        // Handle model selection
-        document.getElementById('model-select').addEventListener('change', (e) => {
-            loadModel(e.target.value);
-        });
 
         // Animation loop
         function animate() {
