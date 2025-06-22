@@ -49,7 +49,6 @@
     <script src="js/OBJLoader.js"></script>
     <script src="js/MTLLoader.js"></script>
     <script>
-        // List of available models
         const models = [
             { name: 'fish-2', file: 'fish-2.obj', mtl: 'fish-2.mtl' }
         ];
@@ -80,38 +79,38 @@
         // Camera position
         camera.position.z = 5;
 
-        // Model loading function
         function loadModel(modelName) {
+            const model = models.find(m => m.name === modelName);
+            if (!model) return;
+        
             // Remove existing model if present
             scene.children.filter(child => child.type === 'Group').forEach(group => scene.remove(group));
             
             document.getElementById('loading').style.display = 'block';
             console.log(`Loading model: ${modelName}`);
             
-            if (modelName === 'fish-2') {
-                // Load materials first
-                new THREE.MTLLoader()
-                    .load('models/fish-2.mtl', (materials) => {
-                        materials.preload();
-                        console.log('Materials loaded');
-                        
-                        // Load object with materials
-                        new THREE.OBJLoader()
-                            .setMaterials(materials)
-                            .load('models/fish-2.obj', (object) => {
-                                console.log('Model loaded');
-                                scene.add(object);
-                                document.getElementById('loading').style.display = 'none';
-                                animate();
-                            }, undefined, (error) => {
-                                console.error('Error loading model:', error);
-                                document.getElementById('loading').textContent = 'Error loading model';
-                            });
-                    }, undefined, (error) => {
-                        console.error('Error loading materials:', error);
-                        document.getElementById('loading').textContent = 'Error loading materials';
-                    });
-            }
+            // Load materials first
+            new THREE.MTLLoader()
+                .load(`models/${model.mtl}`, (materials) => {
+                    materials.preload();
+                    console.log('Materials loaded');
+                    
+                    // Load object with materials
+                    new THREE.OBJLoader()
+                        .setMaterials(materials)
+                        .load(`models/${model.file}`, (object) => {
+                            console.log('Model loaded');
+                            scene.add(object);
+                            document.getElementById('loading').style.display = 'none';
+                            animate();
+                        }, undefined, (error) => {
+                            console.error('Error loading model:', error);
+                            document.getElementById('loading').textContent = 'Error loading model';
+                        });
+                }, undefined, (error) => {
+                    console.error('Error loading materials:', error);
+                    document.getElementById('loading').textContent = 'Error loading materials';
+                });
         }
 
         // Handle model selection
