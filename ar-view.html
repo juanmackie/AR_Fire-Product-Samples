@@ -85,7 +85,7 @@
                 objLoader.setMaterials(materials);
                 objLoader.setPath(modelPath.substring(0, modelPath.lastIndexOf('/') + 1));
                 objLoader.load(modelPath.substring(modelPath.lastIndexOf('/') + 1), function(object) {
-                    object.scale.set(0.1, 0.1, 0.1); // Adjust scale as needed
+                    object.scale.set(0.5, 0.5, 0.5); // Adjust scale as needed
                     markerRoot.add(object);
                 });
             });
