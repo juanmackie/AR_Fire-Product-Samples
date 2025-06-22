@@ -16,6 +16,9 @@
     </style>
 </head>
 <body>
+    <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); color: white; display: flex; justify-content: center; align-items: center; font-size: 2em; z-index: 1000;">
+        Please allow camera access and point to the Hiro marker.
+    </div>
 
     <script>
         // get model path from URL parameter
@@ -38,6 +41,7 @@
             var arToolkitSource = new THREEx.ArToolkitSource({
                 sourceType: 'webcam',
             });
+            console.log('AR.js arToolkitSource initialized.');
 
             function onResize() {
                 arToolkitSource.onResizeElement();
@@ -48,7 +52,9 @@
             }
 
             arToolkitSource.init(function onReady() {
+                console.log('AR.js arToolkitSource onReady callback fired.');
                 onResize();
+                document.getElementById('loading-overlay').style.display = 'none'; // Hide overlay when camera is ready
             });
 
             // handle resize event
@@ -96,7 +102,10 @@
 
             function animate() {
                 requestAnimationFrame(animate);
-                if (arToolkitSource.ready === false) return;
+                if (arToolkitSource.ready === false) {
+                    console.log('arToolkitSource not ready yet.');
+                    return;
+                }
 
                 arToolkitContext.update(arToolkitSource.domElement);
 
