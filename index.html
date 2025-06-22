@@ -73,6 +73,7 @@
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/artoolkit.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/artoolkit.api.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar.js"></script>
+
     <script>
         // Global variables for Three.js and AR.js
         let scene, camera, renderer, clock, deltaTime, totalTime;
@@ -93,58 +94,58 @@
         // Initialize the 3D AR scene
         function init() {
             // Scene setup (AR.js manages camera)
-            scene = new THREE.Scene();
+            scene = new THREE.Scene(); [cite: 4]
 
-            let ambientLight = new THREE.AmbientLight(0xcccccc, 1.0);
-            scene.add(ambientLight);
+            let ambientLight = new THREE.AmbientLight(0xcccccc, 1.0); [cite: 4]
+            scene.add(ambientLight); [cite: 4]
 
             // Camera is handled by AR.js
-            camera = new THREE.Camera();
-            scene.add(camera);
+            camera = new THREE.Camera(); [cite: 4]
+            scene.add(camera); [cite: 4]
 
             // Renderer setup
             renderer = new THREE.WebGLRenderer({
-                antialias: true,
-                alpha: true // Important for transparency over the webcam feed
+                antialias: true, [cite: 5]
+                alpha: true // Important for transparency over the webcam feed 
             });
-            renderer.setClearColor(new THREE.Color('lightgrey'), 0); // Transparent background
+            renderer.setClearColor(new THREE.Color('lightgrey'), 0); [cite: 5]
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.domElement.style.position = 'absolute';
-            renderer.domElement.style.top = '0px';
-            renderer.domElement.style.left = '0px';
-            document.body.appendChild(renderer.domElement);
+            renderer.domElement.style.position = 'absolute'; [cite: 6]
+            renderer.domElement.style.top = '0px'; [cite: 6]
+            renderer.domElement.style.left = '0px'; [cite: 6]
+            document.body.appendChild(renderer.domElement); [cite: 6]
 
-            clock = new THREE.Clock();
-            deltaTime = 0;
-            totalTime = 0;
+            clock = new THREE.Clock(); [cite: 3]
+            deltaTime = 0; [cite: 3]
+            totalTime = 0; [cite: 3]
 
             // AR.js Source (webcam)
             arToolkitSource = new THREEx.ArToolkitSource({
-                sourceType: 'webcam',
+                sourceType: 'webcam', [cite: 7]
             });
 
-            arToolkitSource.init(function onReady() {
-                onResize();
+            arToolkitSource.init(function onReady() { [cite: 7]
+                onResize(); [cite: 7]
             });
 
-            window.addEventListener('resize', onResize);
+            window.addEventListener('resize', onResize); [cite: 8]
 
             // AR.js Context
             arToolkitContext = new THREEx.ArToolkitContext({
-                cameraParametersUrl: 'data/camera_para.dat', // You need this file in a 'data' folder
-                detectionMode: 'mono'
+                cameraParametersUrl: 'data/camera_para.dat', // You need this file in a 'data' folder 
+                detectionMode: 'mono' [cite: 9]
             });
 
-            arToolkitContext.init(function onCompleted() {
-                camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
+            arToolkitContext.init(function onCompleted() { [cite: 9]
+                camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix()); [cite: 9]
             });
 
             // AR Marker Root
-            markerRoot = new THREE.Group();
-            scene.add(markerRoot);
+            markerRoot = new THREE.Group(); [cite: 10]
+            scene.add(markerRoot); [cite: 10]
             let markerControls = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
-                type: 'pattern',
-                patternUrl: "data/hiro.patt", // You need this file in a 'data' folder
+                type: 'pattern', [cite: 10]
+                patternUrl: "data/hiro.patt", // You need this file in a 'data' folder 
                 changeMatrixMode: 'cameraTransformMatrix' // Ensures model stays with marker
             });
 
@@ -155,32 +156,32 @@
 
         // Handle window resize events
         function onResize() {
-            arToolkitSource.onResize();
-            arToolkitSource.copySizeTo(renderer.domElement);
+            arToolkitSource.onResize(); [cite: 7]
+            arToolkitSource.copySizeTo(renderer.domElement); [cite: 7]
             if (arToolkitContext.arController !== null) {
-                arToolkitSource.copySizeTo(arToolkitContext.arController.canvas);
+                arToolkitSource.copySizeTo(arToolkitContext.arController.canvas); [cite: 7]
             }
         }
 
         // Animation loop
         function animate() {
-            requestAnimationFrame(animate);
-            deltaTime = clock.getDelta();
-            totalTime += deltaTime;
-            update();
-            render();
+            requestAnimationFrame(animate); [cite: 16]
+            deltaTime = clock.getDelta(); [cite: 16]
+            totalTime += deltaTime; [cite: 16]
+            update(); [cite: 16]
+            render(); [cite: 16]
         }
 
         // Update AR.js context
         function update() {
             if (arToolkitSource.ready !== false) {
-                arToolkitContext.update(arToolkitSource.domElement);
+                arToolkitContext.update(arToolkitSource.domElement); [cite: 15]
             }
         }
 
         // Render the scene
         function render() {
-            renderer.render(scene, camera);
+            renderer.render(scene, camera); [cite: 16]
         }
 
         // Function to load an OBJ model into the markerRoot
@@ -210,43 +211,43 @@
             const objLoader = new THREE.OBJLoader();
             const mtlLoader = new THREE.MTLLoader();
 
-            mtlLoader.setPath(modelInfo.mtl.substring(0, modelInfo.mtl.lastIndexOf('/') + 1));
-            objLoader.setPath(modelInfo.obj.substring(0, modelInfo.obj.lastIndexOf('/') + 1));
+            mtlLoader.setPath(modelInfo.mtl.substring(0, modelInfo.mtl.lastIndexOf('/') + 1)); [cite: 14]
+            objLoader.setPath(modelInfo.obj.substring(0, modelInfo.obj.lastIndexOf('/') + 1)); [cite: 14]
 
-            mtlLoader.load(modelInfo.mtl, function (materials) {
-                materials.preload();
-                objLoader.setMaterials(materials);
+            mtlLoader.load(modelInfo.mtl, function (materials) { [cite: 14]
+                materials.preload(); [cite: 14]
+                objLoader.setMaterials(materials); [cite: 14]
 
-                objLoader.load(modelInfo.obj, function (object) {
+                objLoader.load(modelInfo.obj, function (object) { [cite: 14]
                     currentModel = object;
 
                     const scaleFactor = modelInfo.scale || 1;
-                    currentModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
+                    currentModel.scale.set(scaleFactor, scaleFactor, scaleFactor); [cite: 14]
 
                     // Center the model and apply offset
                     const box = new THREE.Box3().setFromObject(currentModel);
                     const center = box.getCenter(new THREE.Vector3());
                     currentModel.position.sub(center); // Move model so its center is at (0,0,0) relative to its parent
-                    currentModel.position.y += modelInfo.offsetY || 0; // Apply custom Y offset
+                    currentModel.position.y += modelInfo.offsetY || 0; // Apply custom Y offset 
 
-                    markerRoot.add(currentModel);
+                    markerRoot.add(currentModel); [cite: 14]
                     loadingMessage.classList.add('hidden'); // Hide loading message
 
-                }, onProgress, onError);
-            }, onProgress, onError);
+                }, onProgress, onError); [cite: 14]
+            }, onProgress, onError); [cite: 14]
         }
 
         // Progress handler
         function onProgress(xhr) {
             if (xhr.lengthComputable) {
-                const percentComplete = xhr.loaded / xhr.total * 100;
+                const percentComplete = xhr.loaded / xhr.total * 100; [cite: 13]
                 loadingMessage.textContent = `Loading model: ${Math.round(percentComplete)}% loaded...`;
             }
         }
 
         // Error handler
         function onError(error) {
-            console.error('An error occurred loading the model:', error);
+            console.error('An error occurred loading the model:', error); [cite: 14]
             loadingMessage.textContent = 'Error loading model.';
             loadingMessage.classList.remove('hidden');
         }
