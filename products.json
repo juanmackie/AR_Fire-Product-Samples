@@ -1,31 +1,15 @@
-
 [
     {
         "id": 1,
         "name": "Fish Model",
-        "description": "A beautiful 3D model of a fish.",
+        "description": "A 3D model of a fish.",
         "image": "images/demo/model.png",
-        "model": "models/fish-2.obj"
-    },
-    {
-        "id": 2,
-        "name": "Fish Model 2",
-        "description": "Another beautiful 3D model of a fish.",
-        "image": "images/demo/model.png",
-        "model": "models/fish-2.obj"
-    },
-    {
-        "id": 3,
-        "name": "Fish Model 3",
-        "description": "Yet another beautiful 3D model of a fish.",
-        "image": "images/demo/model.png",
-        "model": "models/fish-2.obj"
-    },
-    {
-        "id": 4,
-        "name": "Fish Model 4",
-        "description": "And one more beautiful 3D model of a fish.",
-        "image": "images/demo/model.png",
-        "model": "models/fish-2.obj"
+        "model_type": "obj",
+        "model_url": "models/fish-2.obj",
+        "material_url": "models/fish-2.mtl",
+        "marker_type": "pattern",
+        "marker_url": "data/hiro.patt",
+        "scale": "0.25 0.25 0.25",
+        "position": "0 0.25 0"
     }
 ]
