@@ -6,6 +6,19 @@
     <script src="https://raw.githack.com/jeromeetienne/AR.js/master/three.js/build/ar.js"></script>
     <script src="https://raw.githack.com/mrdoob/three.js/r128/examples/js/loaders/MTLLoader.js"></script>
     <script src="https://raw.githack.com/mrdoob/three.js/r128/examples/js/loaders/OBJLoader.js"></script>
+    <style>
+        video, canvas {
+            position: absolute !important;
+            top: 0;
+            left: 0;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover;
+        }
+        video {
+            z-index: -1;
+        }
+    </style>
 </head>
 <body style='margin : 0px; overflow: hidden;'>
 
@@ -42,10 +55,10 @@
         });
 
         function onResize() {
-            arToolkitSource.onResize();
-            arToolkitSource.copySizeTo(renderer.domElement);
+            arToolkitSource.onResizeElement()
+            arToolkitSource.copyElementSizeTo(renderer.domElement)
             if (arToolkitContext.arController !== null) {
-                arToolkitSource.copySizeTo(arToolkitContext.arController.canvas);
+                arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas)
             }
         }
 
