@@ -16,54 +16,26 @@
     </div>
 
     <script>
-        const products = [
-            {
-                id: 1,
-                name: 'Fish Model',
-                description: 'A beautiful 3D model of a fish.',
-                image: 'images/demo/model.png', // Placeholder image
-                model: 'models/fish-2.obj'
-            },
-            {
-                id: 2,
-                name: 'Fish Model 2',
-                description: 'Another beautiful 3D model of a fish.',
-                image: 'images/demo/model.png', // Placeholder image
-                model: 'models/fish-2.obj'
-            },
-            {
-                id: 3,
-                name: 'Fish Model 3',
-                description: 'Yet another beautiful 3D model of a fish.',
-                image: 'images/demo/model.png', // Placeholder image
-                model: 'models/fish-2.obj'
-            },
-            {
-                id: 4,
-                name: 'Fish Model 4',
-                description: 'And one more beautiful 3D model of a fish.',
-                image: 'images/demo/model.png', // Placeholder image
-                model: 'models/fish-2.obj'
-            }
-        ];
+        fetch('products.json')
+            .then(response => response.json())
+            .then(products => {
+                const productGrid = document.getElementById('product-grid');
+                products.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
 
-        const productGrid = document.getElementById('product-grid');
+                    card.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}">
+                        <div class="product-info">
+                            <h2>${product.name}</h2>
+                            <p>${product.description}</p>
+                        </div>
+                        <a href="ar-view.html?model=${encodeURIComponent(product.model)}" class="view-ar-btn">View in AR</a>
+                    `;
 
-        products.forEach(product => {
-            const card = document.createElement('div');
-            card.className = 'product-card';
-
-            card.innerHTML = `
-                <img src="${product.image}" alt="${product.name}">
-                <div class="product-info">
-                    <h2>${product.name}</h2>
-                    <p>${product.description}</p>
-                </div>
-                <a href="ar-view.html?model=${encodeURIComponent(product.model)}" class="view-ar-btn">View in AR</a>
-            `;
-
-            productGrid.appendChild(card);
-        });
+                    productGrid.appendChild(card);
+                });
+            });
     </script>
 
 </body>

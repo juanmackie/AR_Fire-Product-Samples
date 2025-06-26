@@ -1,0 +1,15 @@
+{
+  "name": "ar-product-viewer",
+  "version": "1.0.0",
+  "description": "Augmented Reality Product Viewer",
+  "main": "index.html",
+  "scripts": {
+    "start": "python server.py"
+  },
+  "dependencies": {
+    "@ar-js-org/ar.js": "^3.4.5",
+    "three": "^0.127.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
