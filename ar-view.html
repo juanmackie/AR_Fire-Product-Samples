@@ -7,16 +7,12 @@
     <script src="https://raw.githack.com/mrdoob/three.js/r128/examples/js/loaders/MTLLoader.js"></script>
     <script src="https://raw.githack.com/mrdoob/three.js/r128/examples/js/loaders/OBJLoader.js"></script>
     <style>
-        video, canvas {
-            position: absolute !important;
-            top: 0;
-            left: 0;
-            width: 100% !important;
-            height: 100% !important;
-            object-fit: cover;
+        body {
+            margin: 0;
+            overflow: hidden;
         }
-        video {
-            z-index: -1;
+        canvas {
+            display: block;
         }
     </style>
 </head>
@@ -55,11 +51,12 @@
         });
 
         function onResize() {
-            arToolkitSource.onResizeElement()
-            arToolkitSource.copyElementSizeTo(renderer.domElement)
+            arToolkitSource.onResizeElement();
+            arToolkitSource.copyElementSizeTo(renderer.domElement);
             if (arToolkitContext.arController !== null) {
-                arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas)
+                arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas);
             }
+            camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
         }
 
         arToolkitSource.init(function onReady() {
