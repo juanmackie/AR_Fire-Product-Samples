@@ -16,7 +16,7 @@
         }
     </style>
 </head>
-<body style='margin : 0px; overflow: hidden;'>
+<body style='margin: 0; overflow: hidden;'>
 
 <script>
     var scene, camera, renderer, clock, deltaTime, totalTime;
@@ -37,9 +37,6 @@
         });
         renderer.setClearColor(new THREE.Color('lightgrey'), 0);
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.domElement.style.position = 'absolute';
-        renderer.domElement.style.top = '0px';
-        renderer.domElement.style.left = '0px';
         document.body.appendChild(renderer.domElement);
 
         clock = new THREE.Clock();
@@ -57,6 +54,7 @@
                 arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas);
             }
             camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
+            renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
         arToolkitSource.init(function onReady() {
