@@ -8,42 +8,7 @@
     <style>
         body { 
             margin: 0; 
-            padding: 0;
             overflow: hidden; 
-            position: fixed;
-            width: 100vw;
-            height: 100vh;
-            background: black;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-        
-        a-scene {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            z-index: 0;
-            background: transparent;
-        }
-        
-        video, canvas {
-            width: 100vw !important;
-            height: 100vh !important;
-            object-fit: cover !important;
-            position: absolute !important;
-            top: 0 !important;
-            left: 0 !important;
-            transform: none !important;
-        }
-        
-        .a-canvas {
-            width: 100vw !important;
-            height: 100vh !important;
-            top: 0 !important;
-            left: 0 !important;
-            position: fixed !important;
         }
         #model-list {
             position: absolute;
@@ -67,11 +32,14 @@
         <h3>Select a Product</h3>
     </div>
 
-    <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false;' vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
-        <a-marker preset="hiro">
-            <a-entity id="model-entity" scale="0.1 0.1 0.1" position="0 0 0"></a-entity>
+    <a-scene vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" renderer="logarithmicDepthBuffer: true;" arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;">
+        <a-assets>
+            <a-asset-item id="duck" src="models/Duck.glb"></a-asset-item>
+        </a-assets>
+        <a-marker type="pattern" url="https://raw.githack.com/AR-js-org/AR.js/master/data/patt.hiro">
+            <a-entity id="model-entity" gltf-model="#duck" scale="0.1 0.1 0.1" position="0 0 0"></a-entity>
         </a-marker>
-        <a-entity camera look-controls-enabled="false" arjs-look-controls="smoothingFactor: 0.1" arjs-device-orientation-controls="smoothingFactor: 0.1"></a-entity>
+        <a-entity camera></a-entity>
     </a-scene>
 
     <script>
