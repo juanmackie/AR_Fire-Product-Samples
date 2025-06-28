@@ -33,7 +33,7 @@
         <a-marker preset="hiro">
             <a-entity id="model-entity" scale="0.05 0.05 0.05"></a-entity>
         </a-marker>
-        <a-entity camera="zoom: 0.5"></a-entity>
+        <a-entity camera="zoom: 1"></a-entity>
     </a-scene>
 
     <script>
@@ -47,6 +47,12 @@
             .then(response => response.json())
             .then(data => {
                 models = data.models;
+                createModelButtons();
+            })
+            .catch(error => {
+                console.log('Could not load models.json, using fallback');
+                // Fallback for demo purposes
+                models = ['example.glb', 'sample.obj', 'demo.gltf'];
                 createModelButtons();
             });
 
