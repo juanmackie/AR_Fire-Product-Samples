@@ -1,5 +1,8 @@
 {
   "models": [
-    "Duck.glb"
+    {
+      "name": "Duck.glb",
+      "thumbnail": "models/Duck_thumbnail.png"
+    }
   ]
 }
