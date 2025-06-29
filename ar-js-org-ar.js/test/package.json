@@ -1,0 +1,36 @@
+{
+  "name": "arjs-tests",
+  "version": "0.0.1",
+  "description": "tests for AR.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "wdio wdio.conf.js",
+    "server": "http-server --cors='*' -p 8080 ../.",
+    "selenium-server": "selenium-standalone start",
+    "selenium-install": "selenium-standalone install",
+    "wdio": "./node_modules/.bin/wdio"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeromeetienne/AR.js.git"
+  },
+  "keywords": [
+    "AR"
+  ],
+  "author": "Jerome Etienne <jerome.etienne@gmail.com> (http://jetienne.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jeromeetienne/AR.js/issues"
+  },
+  "homepage": "https://github.com/jeromeetienne/AR.js#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "http-server": "^0.9.0",
+    "mocha": "^3.2.0",
+    "selenium-standalone": "^6.2.0",
+    "wdio-mocha-framework": "^0.5.8",
+    "wdio-selenium-standalone-service": "0.0.7",
+    "wdio-spec-reporter": "^0.1.0",
+    "webdriverio": "^4.6.1"
+  }
+}
